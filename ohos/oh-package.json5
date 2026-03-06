@@ -1,0 +1,13 @@
+{
+  "name": "tim_push",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "index.ets",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@ohos/flutter_ohos": "file:./har/flutter.har",
+    "@tencentcloud/timpush": "8.7.7203",
+    "@tencentcloud/imsdk": "8.7.7203"
+  }
+}

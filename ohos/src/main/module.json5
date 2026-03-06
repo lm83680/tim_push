@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "tim_push",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+  }
+}
