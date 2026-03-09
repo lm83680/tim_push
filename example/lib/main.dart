@@ -65,7 +65,6 @@ class _MyAppState extends State<MyApp> {
       appKey: "xxxx",
       businessId: 0,
     );
-    await _timPushPlugin.disablePostNotificationInForeground(disable: true);
     if (!mounted) {
       return;
     }
