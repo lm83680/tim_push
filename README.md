@@ -21,7 +21,7 @@
 
 ```yaml
 dependencies:
-  tim_push: ^0.0.1
+  tim_push: ^latest
 ```
 
 ## 核心 API
