@@ -21,6 +21,8 @@ void main() {
             return 'registration_mock';
           case 'forceUseFCMPushChannel':
             return '';
+          case 'clearAllNotifications':
+            return '';
           default:
             return null;
         }
@@ -57,6 +59,11 @@ void main() {
   test('forceUseFCMPushChannel', () async {
     final TimPushResult<void> result =
         await platform.forceUseFCMPushChannel(enable: true);
+    expect(result.code, 0);
+  });
+
+  test('clearAllNotifications', () async {
+    final TimPushResult<void> result = await platform.clearAllNotifications();
     expect(result.code, 0);
   });
 

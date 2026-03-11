@@ -54,6 +54,11 @@ class MockTimPushPlatform extends TimPushPlatform
   Future<TimPushResult<void>> forceUseFCMPushChannel({required bool enable}) {
     return Future<TimPushResult<void>>.value(TimPushResult<void>(code: 0));
   }
+
+  @override
+  Future<TimPushResult<void>> clearAllNotifications() {
+    return Future<TimPushResult<void>>.value(TimPushResult<void>(code: 0));
+  }
 }
 
 void main() {
@@ -81,5 +86,15 @@ void main() {
         await timPushPlugin.getRegistrationID();
     expect(result.code, 0);
     expect(result.data, 'mock_registration_id');
+  });
+
+  test('clearAllNotifications', () async {
+    final TimPush timPushPlugin = TimPush();
+    final MockTimPushPlatform fakePlatform = MockTimPushPlatform();
+    TimPushPlatform.instance = fakePlatform;
+
+    final TimPushResult<void> result =
+        await timPushPlugin.clearAllNotifications();
+    expect(result.code, 0);
   });
 }

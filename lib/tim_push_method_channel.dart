@@ -101,6 +101,11 @@ class MethodChannelTimPush extends TimPushPlatform {
     );
   }
 
+  @override
+  Future<TimPushResult<void>> clearAllNotifications() {
+    return _invokeVoid('clearAllNotifications');
+  }
+
   Future<void> _ensureMethodHandler() async {
     if (_eventHandlerInitialized) {
       return;

@@ -1,5 +1,6 @@
 package com.example.tim_push;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -87,6 +88,9 @@ public class TimPushPlugin implements FlutterPlugin, MethodCallHandler {
                 break;
             case "forceUseFCMPushChannel":
                 forceUseFCMPushChannel(call, result);
+                break;
+            case "clearAllNotifications":
+                clearAllNotifications(result);
                 break;
             default:
                 result.notImplemented();
@@ -229,6 +233,18 @@ public class TimPushPlugin implements FlutterPlugin, MethodCallHandler {
         boolean enable = readBooleanArg(call, "enable");
         TIMPushManager.getInstance().forceUseFCMPushChannel(enable);
         result.success("");
+    }
+
+    private void clearAllNotifications(@NonNull Result result) {
+        try {
+            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (manager != null) {
+                manager.cancelAll();
+            }
+            result.success("");
+        } catch (Exception error) {
+            result.error("-1", error.getMessage(), null);
+        }
     }
 
     private String readStringArg(@NonNull MethodCall call, @NonNull String key) {

@@ -65,6 +65,10 @@ class TimPush {
   }) {
     return TimPushPlatform.instance.forceUseFCMPushChannel(enable: enable);
   }
+
+  Future<TimPushResult<void>> clearAllNotifications() {
+    return TimPushPlatform.instance.clearAllNotifications();
+  }
 }
 
 @Deprecated('Use TimPush instead.')

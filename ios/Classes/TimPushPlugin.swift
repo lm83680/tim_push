@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import UserNotifications
 import TIMPush
 
 public class TimPushPlugin: NSObject, FlutterPlugin {
@@ -39,6 +40,8 @@ public class TimPushPlugin: NSObject, FlutterPlugin {
     case "forceUseFCMPushChannel":
       // 仅 Android 支持，iOS 保持空实现。
       result(nil)
+    case "clearAllNotifications":
+      clearAllNotifications(result: result)
     default:
       result(FlutterMethodNotImplemented)
     }
@@ -123,6 +126,13 @@ public class TimPushPlugin: NSObject, FlutterPlugin {
   private func disablePostNotificationInForeground(call: FlutterMethodCall, result: @escaping FlutterResult) {
     let disable: Bool = readBool(call: call, key: "disable") ?? false
     TIMPushManager.disablePostNotificationInForeground(disable: disable)
+    result(nil)
+  }
+
+  private func clearAllNotifications(result: @escaping FlutterResult) {
+    UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+    UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+    UIApplication.shared.applicationIconBadgeNumber = 0
     result(nil)
   }
 

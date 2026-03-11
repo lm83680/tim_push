@@ -7,6 +7,7 @@ import {
   MethodResult,
 } from '@ohos/flutter_ohos';
 import common from '@ohos.app.ability.common';
+import { notificationManager } from '@kit.NotificationKit';
 import { TIMPushListener, TIMPushManager, TIMPushMessage } from '@tencentcloud/timpush';
 
 /** TimPushPlugin **/
@@ -64,6 +65,9 @@ export default class TimPushPlugin implements FlutterPlugin, MethodCallHandler {
           // 仅 Android 支持，OHOS 保持空实现。
           result.success(this.ok())
           break
+        case "clearAllNotifications":
+          this.clearAllNotifications(result)
+          break
         default:
           result.notImplemented()
       }
@@ -96,12 +100,12 @@ export default class TimPushPlugin implements FlutterPlugin, MethodCallHandler {
   }
 
   private async getRegistrationID(result: MethodResult): Promise<void> {
-    const registrationID = await TIMPushManager.getInstance().getRegistrationID();
-    result.success({
-      code: 0,
-      message: "ok",
-      data: registrationID
-    })
+    const pushResult = await TIMPushManager.getInstance().getRegistrationID();
+    const normalized = this.normalizeResult(pushResult) as Record<string, ESObject>;
+    if (Number(normalized["code"] ?? -1) == 0) {
+      normalized["data"] = String(normalized["message"] ?? "");
+    }
+    result.success(normalized)
   }
 
   private async addPushListener(call: MethodCall, result: MethodResult): Promise<void> {
@@ -140,6 +144,17 @@ export default class TimPushPlugin implements FlutterPlugin, MethodCallHandler {
     const disable = this.readBoolArg(call, "disable");
     TIMPushManager.getInstance().disablePostNotificationInForeground(disable);
     result.success(this.ok())
+  }
+
+  private clearAllNotifications(result: MethodResult): void {
+    const setBadgeNumberCallback = (error: ESObject): void => {
+      if (error != null && error != undefined) {
+        result.error("-1", this.errorMessage(error), null)
+        return
+      }
+      result.success(this.ok())
+    };
+    notificationManager.setBadgeNumber(0, setBadgeNumberCallback);
   }
 
   private readStringArg(call: MethodCall, key: string): string {

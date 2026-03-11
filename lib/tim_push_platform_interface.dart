@@ -40,22 +40,18 @@ abstract class TimPushPlatform extends PlatformInterface {
   Future<TimPushResult<void>> disablePostNotificationInForeground({
     required bool disable,
   }) {
-    throw UnimplementedError(
-        'disablePostNotificationInForeground() has not been implemented.');
+    throw UnimplementedError('disablePostNotificationInForeground() has not been implemented.');
   }
 
-  Future<TimPushResult<void>> addPushListener(
-      {required TimPushListener listener}) {
+  Future<TimPushResult<void>> addPushListener({required TimPushListener listener}) {
     throw UnimplementedError('addPushListener() has not been implemented.');
   }
 
-  Future<TimPushResult<void>> removePushListener(
-      {required TimPushListener listener}) {
+  Future<TimPushResult<void>> removePushListener({required TimPushListener listener}) {
     throw UnimplementedError('removePushListener() has not been implemented.');
   }
 
-  Future<TimPushResult<void>> setRegistrationID(
-      {required String registrationID}) {
+  Future<TimPushResult<void>> setRegistrationID({required String registrationID}) {
     throw UnimplementedError('setRegistrationID() has not been implemented.');
   }
 
@@ -64,7 +60,10 @@ abstract class TimPushPlatform extends PlatformInterface {
   }
 
   Future<TimPushResult<void>> forceUseFCMPushChannel({required bool enable}) {
-    throw UnimplementedError(
-        'forceUseFCMPushChannel() has not been implemented.');
+    throw UnimplementedError('forceUseFCMPushChannel() has not been implemented.');
+  }
+
+  Future<TimPushResult<void>> clearAllNotifications() {
+    throw UnimplementedError('clearAllNotifications() has not been implemented.');
   }
 }

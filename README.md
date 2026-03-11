@@ -34,6 +34,7 @@ dependencies:
 - `TimPush().removePushListener(...)`
 - `TimPush().disablePostNotificationInForeground(...)`
 - `TimPush().forceUseFCMPushChannel(...)`（仅 Android）
+- `TimPush().clearAllNotifications()`
 
 ## 基本使用
 
