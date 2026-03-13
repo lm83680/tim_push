@@ -1,4 +1,4 @@
-package com.example.tim_push;
+package com.plugin.tim_push;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.os.Looper;
 
 import androidx.annotation.NonNull;
 
-import com.example.tim_push.common.Extras;
+import com.plugin.tim_push.common.Extras;
 import com.tencent.qcloud.tim.push.TIMPushCallback;
 import com.tencent.qcloud.tim.push.TIMPushListener;
 import com.tencent.qcloud.tim.push.TIMPushManager;

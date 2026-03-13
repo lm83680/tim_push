@@ -1,4 +1,4 @@
-group = "com.example.tim_push"
+group = "com.plugin.tim_push"
 version = "1.0-SNAPSHOT"
 
 buildscript {
@@ -27,7 +27,7 @@ apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
 android {
-    namespace = "com.example.tim_push"
+    namespace = "com.plugin.tim_push"
 
     compileSdk = 35
 

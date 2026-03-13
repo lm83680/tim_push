@@ -1,4 +1,4 @@
-package com.example.tim_push.common;
+package com.plugin.tim_push.common;
 
 public interface Extras {
     String BUSINESS_ID = "business_id";

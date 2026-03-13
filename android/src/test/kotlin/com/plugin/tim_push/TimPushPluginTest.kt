@@ -1,4 +1,4 @@
-package com.example.tim_push
+package com.plugin.tim_push
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel

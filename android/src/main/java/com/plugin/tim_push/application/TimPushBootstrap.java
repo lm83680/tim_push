@@ -1,62 +1,121 @@
-package com.example.tim_push.application;
+package com.plugin.tim_push.application;
 
+import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.example.tim_push.TimPushPlugin;
-import com.example.tim_push.common.Extras;
+import androidx.annotation.Nullable;
+
+import com.plugin.tim_push.TimPushPlugin;
+import com.plugin.tim_push.common.Extras;
 import com.tencent.qcloud.tuicore.TUIConstants;
 import com.tencent.qcloud.tuicore.TUICore;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.flutter.app.FlutterApplication;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.FlutterEngineCache;
 import io.flutter.embedding.engine.dart.DartExecutor;
 
-public class TimPushApplication extends FlutterApplication {
-    private final String tag = "TimPushApplication";
+/**
+ * TIMPush Android 宿主初始化入口。
+ * 通过静态组合方式承载初始化与运行时状态，避免宿主必须继承特定 Application。
+ */
+public final class TimPushBootstrap {
+    private static final String TAG = "TimPushBootstrap";
 
-    public static boolean useCustomFlutterEngine = false;
-    public static boolean hadLaunchedMainActivity = false;
+    private static boolean initialized = false;
+    private static boolean useCustomFlutterEngine = false;
+    private static boolean hadLaunchedMainActivity = false;
+    private static Application application;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+    private TimPushBootstrap() {
+    }
+
+    public static synchronized void init(Context context) {
+        if (initialized) {
+            return;
+        }
+        Application resolvedApplication = resolveApplication(context);
+        if (resolvedApplication == null) {
+            Log.e(TAG, "Failed to resolve Application from context.");
+            return;
+        }
+        application = resolvedApplication;
         TUICore.callService(TUIConstants.TIMPush.SERVICE_NAME, TUIConstants.TIMPush.METHOD_DISABLE_AUTO_REGISTER_PUSH, null);
         registerOnNotificationClickedEventToTUICore();
         registerOnAppWakeUp();
+        initialized = true;
     }
 
-    private void generateFlutterEngine() {
+    public static synchronized void markMainActivityLaunched() {
+        hadLaunchedMainActivity = true;
+    }
+
+    @Nullable
+    public static synchronized String getCachedEngineId(@Nullable Intent intent) {
+        if (useCustomFlutterEngine) {
+            return Extras.FLUTTER_ENGINE;
+        }
+        if (intent == null) {
+            return null;
+        }
+        try {
+            return intent.getStringExtra("cached_engine_id");
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    @Nullable
+    private static Application resolveApplication(Context context) {
+        Context applicationContext = context.getApplicationContext();
+        if (applicationContext instanceof Application) {
+            return (Application) applicationContext;
+        }
+        if (context instanceof Application) {
+            return (Application) context;
+        }
+        return null;
+    }
+
+    private static synchronized void generateFlutterEngine() {
+        if (application == null) {
+            return;
+        }
         if (FlutterEngineCache.getInstance().contains(Extras.FLUTTER_ENGINE) || hadLaunchedMainActivity) {
             return;
         }
         new Handler(Looper.getMainLooper()).post(() -> {
             useCustomFlutterEngine = true;
-            FlutterEngine engine = new FlutterEngine(this);
+            FlutterEngine engine = new FlutterEngine(application);
             engine.getDartExecutor().executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault());
             FlutterEngineCache.getInstance().put(Extras.FLUTTER_ENGINE, engine);
         });
     }
 
-    private void launchMainActivity(boolean showInForeground) {
-        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+    private static void launchMainActivity(boolean showInForeground) {
+        Application app = application;
+        if (app == null) {
+            return;
+        }
+        Intent launchIntent = app.getPackageManager().getLaunchIntentForPackage(app.getPackageName());
         if (launchIntent != null) {
             launchIntent.putExtra(Extras.SHOW_IN_FOREGROUND, showInForeground);
-            startActivity(launchIntent);
+            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            app.startActivity(launchIntent);
         } else {
-            Log.e(tag, "Failed to get launch intent for package: " + getPackageName());
+            Log.e(TAG, "Failed to get launch intent for package: " + app.getPackageName());
         }
     }
 
-    private void scheduleCheckPluginInstanceAndNotify(final String action, final String data) {
+    private static void scheduleCheckPluginInstanceAndNotify(final String action, final String data) {
         final Handler handler = new Handler(Looper.getMainLooper());
-        Timer timer = new Timer();
+        final Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -67,14 +126,14 @@ public class TimPushApplication extends FlutterApplication {
                             timer.cancel();
                         }
                     } catch (Exception e) {
-                        Log.e(tag, e.toString());
+                        Log.e(TAG, e.toString());
                     }
                 });
             }
         }, 100, 500);
     }
 
-    private void registerOnNotificationClickedEventToTUICore() {
+    private static void registerOnNotificationClickedEventToTUICore() {
         TUICore.registerEvent(
                 TUIConstants.TIMPush.EVENT_NOTIFY,
                 TUIConstants.TIMPush.EVENT_NOTIFY_NOTIFICATION,
@@ -90,7 +149,7 @@ public class TimPushApplication extends FlutterApplication {
         );
     }
 
-    private void registerOnAppWakeUp() {
+    private static void registerOnAppWakeUp() {
         TUICore.registerEvent(
                 TUIConstants.TIMPush.EVENT_IM_LOGIN_AFTER_APP_WAKEUP_KEY,
                 TUIConstants.TIMPush.EVENT_IM_LOGIN_AFTER_APP_WAKEUP_SUB_KEY,

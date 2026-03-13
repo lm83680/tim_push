@@ -1,3 +1,9 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.example.tim_push">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <application>
+    <provider
+      android:name="com.plugin.tim_push.application.TimPushInitProvider"
+      android:authorities="${applicationId}.tim_push_init_provider"
+      android:exported="false"
+      android:initOrder="100" />
+  </application>
 </manifest>
