@@ -1,6 +1,6 @@
 name: tim_push
 description: "Tencent Cloud TIMPush Flutter plugin with Android/iOS/OHOS support."
-version: 1.2.0
+version: 1.2.1
 repository: https://github.com/lm83680/tim_push
 issue_tracker: https://github.com/lm83680/tim_push/issues
 topics:
