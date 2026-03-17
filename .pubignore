@@ -1,1 +1,5 @@
+build/
+.codex/
+verification.md
+tim_push.iml
 example/pubspec.lock

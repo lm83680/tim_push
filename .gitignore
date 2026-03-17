@@ -37,3 +37,4 @@ build/
 .ci/
 verification.md
 *.lock
+!example/pubspec.lock
