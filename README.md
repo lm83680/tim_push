@@ -244,5 +244,5 @@ defaultConfig {
 
 ### 5. OHOS 配置说明
 
-- 鸿蒙侧 `businessId` 从 `registerPush` 函数中传递
+- 鸿蒙侧 `ohosBusinessId` 从 `registerPush` 函数中传递
 - 其余无
