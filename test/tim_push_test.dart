@@ -10,7 +10,7 @@ class MockTimPushPlatform extends TimPushPlatform
   Future<TimPushResult<void>> registerPush({
     int? sdkAppId,
     String? appKey,
-    int? businessId,
+    int? ohosBusinessId,
   }) {
     return Future<TimPushResult<void>>.value(TimPushResult<void>(code: 0));
   }

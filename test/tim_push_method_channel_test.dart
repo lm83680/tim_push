@@ -8,12 +8,15 @@ void main() {
 
   MethodChannelTimPush platform = MethodChannelTimPush();
   const MethodChannel channel = MethodChannel('tim_push');
+  MethodCall? lastMethodCall;
 
   setUp(() {
+    lastMethodCall = null;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
       channel,
       (MethodCall methodCall) async {
+        lastMethodCall = methodCall;
         switch (methodCall.method) {
           case 'registerPush':
             return '';
@@ -46,8 +49,17 @@ void main() {
   }
 
   test('registerPush', () async {
-    final TimPushResult<void> result = await platform.registerPush();
+    final TimPushResult<void> result = await platform.registerPush(
+      sdkAppId: 1,
+      appKey: 'app_key',
+      ohosBusinessId: 2,
+    );
     expect(result.code, 0);
+    expect(lastMethodCall?.arguments, <String, dynamic>{
+      'sdk_app_id': 1,
+      'app_key': 'app_key',
+      'ohos_business_id': 2,
+    });
   });
 
   test('getRegistrationID', () async {

@@ -1,3 +1,8 @@
+## 1.2.1
+
+* 更新 README.md
+* 为避免歧义，`registerPush` 入参 `businessId` 更名为 `ohosBusinessId`
+
 ## 1.2.0
 
 * Android 端改为插件自主初始化，不再依赖宿主继承特定 `Application`

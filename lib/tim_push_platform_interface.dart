@@ -28,7 +28,7 @@ abstract class TimPushPlatform extends PlatformInterface {
   Future<TimPushResult<void>> registerPush({
     int? sdkAppId,
     String? appKey,
-    int? businessId,
+    int? ohosBusinessId,
   }) {
     throw UnimplementedError('registerPush() has not been implemented.');
   }

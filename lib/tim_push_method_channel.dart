@@ -20,7 +20,7 @@ class MethodChannelTimPush extends TimPushPlatform {
   Future<TimPushResult<void>> registerPush({
     int? sdkAppId,
     String? appKey,
-    int? businessId,
+    int? ohosBusinessId,
   }) async {
     await _ensureMethodHandler();
     return _invokeVoid(
@@ -28,7 +28,7 @@ class MethodChannelTimPush extends TimPushPlatform {
       <String, dynamic>{
         'sdk_app_id': sdkAppId,
         'app_key': appKey,
-        'business_id': businessId,
+        'ohos_business_id': ohosBusinessId,
       },
     );
   }

@@ -15,12 +15,12 @@ class TimPush {
   Future<TimPushResult<void>> registerPush({
     int? sdkAppId,
     String? appKey,
-    int? businessId,
+    int? ohosBusinessId,
   }) {
     return TimPushPlatform.instance.registerPush(
       sdkAppId: sdkAppId,
       appKey: appKey,
-      businessId: businessId,
+      ohosBusinessId: ohosBusinessId,
     );
   }
 

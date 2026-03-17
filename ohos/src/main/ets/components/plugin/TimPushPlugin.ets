@@ -83,8 +83,8 @@ export default class TimPushPlugin implements FlutterPlugin, MethodCallHandler {
     }
     const sdkAppId = this.readNumberArg(call, "sdk_app_id");
     const appKey = this.readStringArg(call, "app_key");
-    const businessId = this.readNumberArg(call, "business_id");
-    const pushResult = await TIMPushManager.getInstance().registerPush(this.context, sdkAppId, appKey, businessId);
+    const ohosBusinessId = this.readNumberArg(call, "ohos_business_id");
+    const pushResult = await TIMPushManager.getInstance().registerPush(this.context, sdkAppId, appKey, ohosBusinessId);
     result.success(this.normalizeResult(pushResult))
   }
 

@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
     final TimPushResult<void> result = await _timPushPlugin.registerPush(
       sdkAppId: 0,
       appKey: "xxxx",
-      businessId: 0,
+      ohosBusinessId: 0,
     );
     if (!mounted) {
       return;

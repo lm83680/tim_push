@@ -1,7 +1,7 @@
 package com.plugin.tim_push.common;
 
 public interface Extras {
-    String BUSINESS_ID = "business_id";
+    String OHOS_BUSINESS_ID = "ohos_business_id";
     String PUSH_TOKEN = "push_token";
     String ANDROID_CONFIGS = "configs";
     String FCM_PUSH_CHANNEL_ID = "fcm_push_channel_id";

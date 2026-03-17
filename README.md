@@ -83,7 +83,7 @@ class AppPush {
     final result = await timPush.registerPush(
       sdkAppId: AppOptions.timPushAppId,
       appKey: AppOptions.timPushAppKey,
-      businessId: AppOptions.timPushBusinessId,
+      ohosBusinessId: AppOptions.timPushBusinessId,
     );
     AppLogger.d('初始化推送服务: code=${result.code}, message=${result.message}');
 
@@ -198,23 +198,51 @@ defaultConfig {
 - `mcs-services.json`
 
 主配置文件：
+
 - `timpush-configs.json` 在腾讯云下载
 
-### 4. iOS 配置说明
+#### 3.6 FCM 默认通知通道
 
-当前版本插件已经在内部封装了 iOS 原生桥接，宿主工程不需要额外在 `AppDelegate` 中手写 `tim_push` 相关代码。
+如果使用FCM，还需要在`android/app/src/main/AndroidManifest.xml`声明
+```xml
+<meta-data
+    android:name="com.google.firebase.messaging.default_notification_channel_id"
+    android:value="@string/default_notification_channel_id" />
+```
+
+### 4. iOS 配置说明
 
 宿主侧仍需要完成这些基础项：
 
 - 开启 Push Notifications 能力。
-- 开启 Remote notifications 后台模式。
+- 动态申请通知权限（建议`permission_handler`）
 - 在 Apple Developer 与腾讯云控制台配置 APNs 证书或密钥。
 - 使用与 Android 相同的 Flutter 注册代码调用 `registerPush` / `addPushListener`。
+- 开启 Remote notifications 后台模式 `Info.plist`。
+```xml
+<key>UIBackgroundModes</key>
+<array>
+	<string>remote-notification</string>
+</array>
+```
+- 在 `AppDelegate` 内提供离线推送证书 ID
+```diff
+@main
+@objc class AppDelegate: FlutterAppDelegate {
++  @objc func offlinePushCertificateID() -> Int32 {
++    #if DEBUG
++    return 0 // 开发环境证书 ID
++    #else
++    return 1 // 生产环境证书 ID
++    #endif
++  }
+}
+```
 
 如果你已经按上面步骤完成，而 iOS 仍无法收推送，优先检查 APNs 证书、Bundle ID、环境（开发/生产）是否一致。
+> 于我而言，ios 平台是最省事的
 
 ### 5. OHOS 配置说明
 
-- 插件已在 `ohos/oh-package.json5` 中集成 `@tencentcloud/timpush` 与 `@tencentcloud/imsdk`。
-- Flutter 侧直接调用 `registerPush` / `addPushListener` 即可桥接 `TIMPushManager`。
-- 推荐在应用启动早期注册监听器。
+- 鸿蒙侧 `businessId` 从 `registerPush` 函数中传递
+- 其余无
